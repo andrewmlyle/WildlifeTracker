@@ -7,7 +7,7 @@ This file is provided as an example:
 """
 import os
 from py4web.core import required_folder
-from .private.secret_settings import *
+# from .private.secret_settings import *
 
 # db settings
 APP_FOLDER = os.path.dirname(__file__)
@@ -22,13 +22,13 @@ DB_FAKE_MIGRATE = False  # maybe?
 
 # Google Cloud Database
 CLOUD_DB_URI = "google:MySQLdb://{DB_USER}:{DB_PASSWORD}@/{DB_NAME}?unix_socket=/cloudsql/{DB_CONNECTION}".format(
-    DB_USER=DB_USER,
-    DB_NAME=DB_NAME,
-    DB_PASSWORD=DB_PASSWORD,
-    DB_CONNECTION=DB_CONNECTION
+    DB_USER="user",
+    DB_NAME="wildlifedb",
+    DB_PASSWORD="password",
+    DB_CONNECTION="secret-antonym-315521:us-central1:wildlifetracker"
 )
 CLOUD_DB_POOL_SIZE = 1
-CLOUD_DB_MIGRATE = False # IMPORTANT!
+CLOUD_DB_MIGRATE =  False # IMPORTANT!
 CLOUD_DB_FAKE_MIGRATE = False
 
 # location where static files are stored:
@@ -95,9 +95,10 @@ T_FOLDER = required_folder(APP_FOLDER, "translations")
 # Celery settings
 USE_CELERY = False
 CELERY_BROKER = "redis://localhost:6379/0"
-
+OAUTH2GOOGLE_CLIENT_ID = "382219547800-fho3e5usc7hil3410l3nj9dhn9iq239h.apps.googleusercontent.com"
+OAUTH2GOOGLE_CLIENT_SECRET = "1yhS_nyKQdNVz2FToy-yXcnT"
 # try import private settings
-try:
-    from .private.secret_settings import *
-except (ImportError, ModuleNotFoundError):
-    pass
+# try:
+#     from .private.secret_settings import *
+# except (ImportError, ModuleNotFoundError):
+#     pass
