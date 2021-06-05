@@ -43,6 +43,8 @@ def index():
         load_sighting_url=URL('load_sightings', signer=url_signer),
         load_user_sightings_url=URL('load_user_sightings', signer=url_signer),
         add_sighting_url=URL('add_sighting', signer=url_signer),
+        delete_sighting_url=URL('delete_sighting', signer=url_signer),
+
     )
 
 
@@ -69,13 +71,23 @@ def load_user_sightings():
     return dict(rows=rows)
 
 
+@action('delete_sighting')
+@action.uses(url_signer.verify(), db)
+def delete_sighting():
+    id = request.params.get('id')
+    assert id is not None
+    db(db.sightings.id == id).delete()
+    return "ok"
+
 @action('add_sighting', method="POST")
 @action.uses(url_signer.verify(), db)
 def add_sighting():
-    id = db.sightings.insert(
+    id = db.sightings.update_or_insert(
+    	(db.sightings.id == request.json.get('id')),
         animal_id=request.json.get('animal_id'),
         user_id=request.json.get('user_id'),
         latitude=request.json.get('latitude'),
         longitude=request.json.get('longitude'),
     )
     return dict(id=id)
+
