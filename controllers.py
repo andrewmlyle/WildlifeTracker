@@ -36,5 +36,48 @@ url_signer = URLSigner(session)
 @action('index')
 @action.uses(db, auth, 'index.html')
 def index():
-    print("User:", get_user_email())
-    return dict()
+    return dict(
+        # This is the signed URL for the callback.
+        load_animal_url = URL('load_animals', signer=url_signer),
+        load_sighting_url = URL('load_sightings', signer=url_signer),
+        load_user_sightings_url = URL('load_user_sightings', signer=url_signer),
+        add_sighting_url = URL('add_sighting', signer=url_signer),
+    )
+
+
+
+
+@action('load_animals')
+@action.uses(url_signer.verify(), db, auth.user)
+def load_animals():
+    rows = db(db.animals).select().as_list()
+    return dict(rows=rows)
+
+@action('load_sightings')
+@action.uses(url_signer.verify(), db, auth.user)
+def load_sightings():
+	rows = db(db.sightings).select().as_list()
+	return dict(rows=rows)
+
+
+@action('load_user_sightings')
+@action.uses(url_signer.verify(), db)
+def load_user_sightings():
+    id = request.params.get('id')
+    assert id is not None
+    rows = db(db.posts.id == id).select().as_list()
+    return dict(rows=rows)
+
+
+@action('add_sighting', method="POST")
+@action.uses(url_signer.verify(), db)
+def add_sighting():
+    id = db.sightings.insert(
+        animal_id=request.json.get('animal_id'),
+        user_id=request.json.get('user_id'),
+        latitude = request.json.get('latitude'),
+        longitude = request.json.get('longitude'),
+    )
+    return dict(id=id)
+
+
