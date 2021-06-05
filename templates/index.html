@@ -5,20 +5,45 @@
      display: none;
 }
 
-#content {
+.section {
+  overflow-y: hidden; /* hide vertical */
+  overflow-x: hidden; /* hide horizontal */
+}
+
+.container {
     width: 100%;
     /*padding: 20px;*/
     min-height: 100vh;
     transition: all 0.3s;
 }
-.map{
-    height: 100vh;
+.map {
+    height: 70vh;
 }
 </style>
 
 <div class="section" id="vue-target" v-cloak>
   <!-- Put here your Vue.js template -->
-  <div id="content">
+
+  <div class="contianer is-fluid">
+    <div class="field">
+      <h2>Select an Animal</h2>
+      <p class="control has-icons-left">
+        <span class="select">
+          <select>
+            <option v-for="animal in animals" :key="animal.id">
+              {{ animal.animal_name }}
+            </option>
+          </select>
+        </span>
+        <span class="icon is-small is-left">
+          <i class="fas fa-globe"></i>
+        </span>
+      </p>
+    </div>
+  </div>
+
+
+  <div class="section container is-fluid">
     <div id="map" class="map"></div>
   </div>
 
@@ -26,6 +51,12 @@
 
 
 [[block page_scripts]]
+<script>
+  let load_animal_url = "[[=XML(load_animal_url)]]";
+  let load_sighting_url = "[[=XML(load_sighting_url)]]";
+  let load_user_sightings_url = "[[=XML(load_user_sightings_url)]]";
+  let add_sighting_url = "[[=XML(add_sighting_url)]]";
+</script>
 <!-- Loads the index-specific js for Vue -->
 <!--<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>-->
