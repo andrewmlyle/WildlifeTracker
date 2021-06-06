@@ -107,24 +107,21 @@ let init = (app) => {
                     let x = parseFloat(sight.latitude);
                     let y = parseFloat(sight.longitude);
                     let name = "";
+                    let desc = "";
                     for (let animal of app.vue.animals) {
                         if (sight.animal_id == animal.id) {
                             name = animal.animal_name;
+                            desc = animal.animal_description;
                         }
                     }
-
                     axios.get(load_user_url, {params: {"id": sight.user_id}})
                     .then((result) => {
                         console.log(result.data.rows[0].email);
-                        app.addMarker({lat: x, lng: y}, name, result.data.rows[0].email);
+                        app.addMarker({lat: x, lng: y}, name, desc, result.data.rows[0].email, sight.id);
                     });
                 }
             });
     };
-
-    app.test = function () {
-        console.log("please print something god damn it");
-    }
 
     app.addMarker = function(location, animal, description, userEmail, id) {
         console.log(location, animal, description, userEmail, id);
@@ -171,7 +168,6 @@ let init = (app) => {
             map: this.map,
         });
 
-        console.log(infowindow);
         marker.addListener("click", () => {
             const promise = new Promise((resolve, reject) => {
                 infowindow.open(map, marker);
@@ -180,11 +176,11 @@ let init = (app) => {
 
             // Log the result
             promise.then((response) => {
-                console.log(response)
+                //console.log(response)
                 console.log(app.vue.userName, userEmail);
 
                 let x = document.getElementById(id);
-                console.log(x);
+                //console.log(x);
                 if (app.vue.userName == userEmail) {
                     x.style.display = "block";
                 } else {
@@ -220,7 +216,7 @@ let init = (app) => {
 
                 axios.get(load_user_url, {params: {"id": sight.user_id}})
                     .then((result) => {
-                        console.log(result.data.rows[0].email);
+                        //console.log(result.data.rows[0].email);
                         app.addMarker({lat: x, lng: y}, name, desc, result.data.rows[0].email, sight.id);
                     });
             }
@@ -230,9 +226,9 @@ let init = (app) => {
     app.add_sighting = function (Userid, user, Animalid, Animalname) {
         axios.post(add_sighting_url, {id: -1, animal_id: Animalid, user_id: Userid, latitude: app.vue.lat, longitude: app.vue.long})
             .then(function (response) {
-                //console.log(response);
+                console.log(response);
                 let Adesc = app.vue.animals[Animalid].animal_description;
-                app.addMarker({lat: app.vue.lat, lng: app.vue.long}, Animalname, Adesc, user["email"], response.id);
+                app.addMarker({lat: app.vue.lat, lng: app.vue.long}, Animalname, Adesc, user["email"], response.data.id);
                 document.getElementById("myModal").classList.toggle("is-active");
                 app.vue.lat = 0;
                 app.vue.long = 0;
@@ -248,7 +244,7 @@ let init = (app) => {
                 app.enumerate(r);
 
                 for (let i = 0; i < r.length; i++) {
-                    console.log(i, r[i]);
+                    //console.log(i, r[i]);
                 }
             });
     };
