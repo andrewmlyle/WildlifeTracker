@@ -93,7 +93,8 @@ let init = (app) => {
             app.vue.markers[i].setMap(null);
         }
         app.vue.markers = [];
-    }
+    };
+
     app.updateSightings = function() {
         axios.get(load_sighting_url)
             .then((result) => {
@@ -112,12 +113,57 @@ let init = (app) => {
                         }
                     }
 
-                    app.addMarker({lat: x, lng: y}, name);
+                    axios.get(load_user_url, {params: {"id": sight.user_id}})
+                    .then((result) => {
+                        console.log(result.data.rows[0].email);
+                        app.addMarker({lat: x, lng: y}, name, result.data.rows[0].email);
+                    });
                 }
             });
     };
 
-    app.addMarker = function(location, animal) {
+    app.test = function () {
+        console.log("please print something god damn it");
+    }
+
+    app.addMarker = function(location, animal, description, userEmail, id) {
+        console.log(location, animal, description, userEmail, id);
+        const contentString =
+            '<div class="card">' +
+            '<header class="card-header">' +
+            '<p class="card-header-title">Lat: ' +
+            location.lat +
+            ' | Lng: ' +
+            location.lng +
+            '</p>' +
+            '</header>' +
+            '<div class="card-content">' +
+            '<div class="content">' +
+            '<p>Animal Name: ' +
+            animal +
+            '</p>' +
+            '<br>' +
+            '<p>Animal Description: ' +
+            description +
+            '</p>' +
+            '<br>' +
+            '<p>Sighting Reported By: ' +
+            userEmail +
+            '</p>' +
+            '</p>' +
+            '</div>' +
+            '</div>' +
+            '<footer class="card-footer" id=' +
+            id +
+            '>' +
+            '<button class="button is-success">Edit</button>' +
+            '<button class="button" @click="close()" data-bulma-modal="close">Delete</button>' +
+            '</footer>' +
+            '</div>';
+
+        const infowindow = new google.maps.InfoWindow({
+            content: contentString,
+        });
         const marker = new google.maps.Marker({
             position: location,
             //label: app.vue.userName,
@@ -125,17 +171,37 @@ let init = (app) => {
             map: this.map,
         });
 
+        console.log(infowindow);
         marker.addListener("click", () => {
-            infoWindow.close();
-            infoWindow.setContent("test");
-            infoWindow.open(marker.getMap(), marker);
+            const promise = new Promise((resolve, reject) => {
+                infowindow.open(map, marker);
+                setTimeout(() => resolve('Resolving an asynchronous request!'), 10)
+            })
+
+            // Log the result
+            promise.then((response) => {
+                console.log(response)
+                console.log(app.vue.userName, userEmail);
+
+                let x = document.getElementById(id);
+                console.log(x);
+                if (app.vue.userName == userEmail) {
+                    x.style.display = "block";
+                } else {
+                    x.style.display = "none";
+                }
+            })
+
         });
 
         app.vue.markers.push(marker);
     };
 
+    app.updateUser = function(user) {
+        this.userName = user.email;
+    }
+
     app.filterAnimal = function(event) {
-        console.log(event.target.value);
         app.clearMarkers();
 
         for (let sight of app.vue.sightings) {
@@ -144,25 +210,29 @@ let init = (app) => {
                 let y = parseFloat(sight.longitude);
 
                 let name = "";
+                let desc = "";
                 for (let animal of app.vue.animals) {
                     if (sight.animal_id == animal.id) {
+                        desc = animal.animal_description;
                         name = animal.animal_name;
                     }
                 }
 
-                console.log(name);
-                app.addMarker({lat: x, lng: y}, name);
+                axios.get(load_user_url, {params: {"id": sight.user_id}})
+                    .then((result) => {
+                        console.log(result.data.rows[0].email);
+                        app.addMarker({lat: x, lng: y}, name, desc, result.data.rows[0].email, sight.id);
+                    });
             }
         }
     }
 
-    app.add_sighting = function (Userid, User, Animalid, Animalname) {
-        console.log(Animalname);
-        app.vue.userName = User['first_name'];
-        axios.post(add_sighting_url, {animal_id: Animalid, user_id: Userid, latitude: app.vue.lat, longitude: app.vue.long})
+    app.add_sighting = function (Userid, user, Animalid, Animalname) {
+        axios.post(add_sighting_url, {id: -1, animal_id: Animalid, user_id: Userid, latitude: app.vue.lat, longitude: app.vue.long})
             .then(function (response) {
                 //console.log(response);
-                app.addMarker({lat: app.vue.lat, lng: app.vue.long}, Animalname);
+                let Adesc = app.vue.animals[Animalid].animal_description;
+                app.addMarker({lat: app.vue.lat, lng: app.vue.long}, Animalname, Adesc, user["email"], response.id);
                 document.getElementById("myModal").classList.toggle("is-active");
                 app.vue.lat = 0;
                 app.vue.long = 0;
@@ -174,8 +244,11 @@ let init = (app) => {
     app.addressTranslate = function() {
         axios.get("http://api.geonames.org/findNearestAddressJSON?lat=" + app.vue.lat + "&lng=" + app.vue.lat + "&username=arlogana")
             .then((result) => {
-                for (let i = 0; i < result.length; i++) {
-                    //console.log(i, result[i]);
+                let r = result.data.rows;
+                app.enumerate(r);
+
+                for (let i = 0; i < r.length; i++) {
+                    console.log(i, r[i]);
                 }
             });
     };
@@ -216,6 +289,7 @@ let init = (app) => {
         close: app.close,
         err: app.err,
         addressTranslate: app.addressTranslate,
+        updateUser: app.updateUser,
     };
 
     // This creates the Vue instance.
@@ -247,13 +321,18 @@ let init = (app) => {
                     let x = parseFloat(sight.latitude);
                     let y = parseFloat(sight.longitude);
                     let name = "";
+                    let desc = "";
                     for (let animal of app.vue.animals) {
                         if (sight.animal_id == animal.id) {
                             name = animal.animal_name;
+                            desc = animal.animal_description;
                         }
                     }
-
-                    app.addMarker({lat: x, lng: y}, name);
+                    axios.get(load_user_url, {params: {"id": sight.user_id}})
+                    .then((result) => {
+                        console.log(result.data.rows[0].email);
+                        app.addMarker({lat: x, lng: y}, name, desc, result.data.rows[0].email, sight.id);
+                    });
                 }
             });
     };

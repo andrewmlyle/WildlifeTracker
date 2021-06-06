@@ -22,7 +22,7 @@
 </style>
 
 <div class="section" id="vue-target" v-cloak>
-  <!-- Put here your Vue.js template -->
+  <div v-if="updateUser([[=user]])"></div>
 
   <div class="contianer is-fluid">
     <div class="field">
@@ -90,6 +90,7 @@
   let load_sighting_url = "[[=XML(load_sighting_url)]]";
   let load_user_sightings_url = "[[=XML(load_user_sightings_url)]]";
   let add_sighting_url = "[[=XML(add_sighting_url)]]";
+  let load_user_url = "[[=XML(load_user_url)]]";
 </script>
 <!-- Loads the index-specific js for Vue -->
 <!--<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>

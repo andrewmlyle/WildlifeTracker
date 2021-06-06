@@ -45,8 +45,14 @@ def index():
         add_sighting_url=URL('add_sighting', signer=url_signer),
         user=auth.current_user,
         delete_sighting_url=URL('delete_sighting', signer=url_signer),
+        load_user_url=URL('load_user', signer=url_signer),
     )
 
+@action('load_user')
+@action.uses(url_signer.verify(), db)
+def load_user():
+    rows = db(db.auth_user.id == request.params.get('id')).select().as_list()
+    return dict(rows=rows)
 
 @action('load_animals')
 @action.uses(url_signer.verify(), db)
