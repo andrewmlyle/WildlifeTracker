@@ -1,0 +1,31 @@
+CREATE TABLE animals (
+id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+animal_name varchar(512) NOT NULL,
+animal_description varchar(512) NOT NULL,
+UNIQUE KEY animal_name (animal_name)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE sightings (
+id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+animal_id int(11) DEFAULT NULL,
+user_id int(11) DEFAULT NULL,
+latitude varchar(512) DEFAULT NULL,
+longitude varchar(512) DEFAULT NULL,
+KEY animal_fk (animal_id),
+CONSTRAINT animal_fk FOREIGN KEY (animal_id) REFERENCES animals (id) ON DELETE CASCADE,
+KEY user_fk (user_id),
+CONSTRAINT user_fk FOREIGN KEY (user_id) REFERENCES auth_user (id) ON DELETE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+
+
+
+db.define_table('sightings',
+				Field('animal_id', 'reference animals'),
+				Field('user_id', 'reference auth_user', default=get_user_id),
+				Field('latitude'),
+				Field('longitude')
+)

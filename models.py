@@ -25,11 +25,9 @@ db.define_table('animals',
                 )
 db.define_table('sightings',
                 Field('animal_id', 'reference animals'),
-                Field('user_id', 'reference auth_user', default=get_user_id),
+                Field('user_id', 'reference auth_user'),
                 Field('latitude'),
                 Field('longitude')
                 )
-
-db.sightings.user_id.readable = db.sightings.user_id.writable = False
 
 db.commit()
