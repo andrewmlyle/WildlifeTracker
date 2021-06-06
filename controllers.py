@@ -43,6 +43,7 @@ def index():
         load_sighting_url=URL('load_sightings', signer=url_signer),
         load_user_sightings_url=URL('load_user_sightings', signer=url_signer),
         add_sighting_url=URL('add_sighting', signer=url_signer),
+        user=auth.current_user,
     )
 
 

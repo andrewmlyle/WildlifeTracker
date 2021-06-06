@@ -26,11 +26,12 @@
 
   <div class="contianer is-fluid">
     <div class="field">
-      <h2>Select an Animal</h2>
+      <h2>Filter Sightings by Animal</h2>
       <p class="control has-icons-left">
         <span class="select">
-          <select>
-            <option v-for="animal in animals" :key="animal.id">
+          <select v-model="filter" @change="filterAnimal($event)">
+            <option v-bind:value=-1>All Animals</option>
+            <option v-for="animal in animals" :key="animal.id" v-bind:value=animal.id>
               {{ animal.animal_name }}
             </option>
           </select>
@@ -47,6 +48,39 @@
     <div id="map" class="map"></div>
   </div>
 
+  <div class="modal" id="myModal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Add a Sighting Here? </p>
+      <button class="delete" aria-label="close" @click="close()" data-bulma-modal="close"></button>
+    </header>
+    <section class="modal-card-body">
+      <p>@ Latitude: {{ lat }} Longitude: {{ long }}</p>
+      <p>(aka (approximately): {{ address }})</p>
+      <br>
+      <p>Select What Animal Was Spotted here:</p>
+      <span class="select">
+          <select v-model="selected">
+            <option v-for="animal in animals" :key="animal.id" v-bind:value="{ id: animal.id, name: animal.animal_name }">
+              {{ animal.animal_name }}
+            </option>
+          </select>
+      </span>
+      <p>{{selected}}</p>
+    </section>
+    <footer class="modal-card-foot">
+      [[if globals().get('user'):]]
+      <button class="button is-success" @click="add_sighting([[=globals().get('user').get('id')]], [[=user]], selected.id, selected.name)">Save changes</button>
+      [[else:]]
+      <p>{{ errorMsg }}</p>
+      <br>
+      <button class="button is-danger" @click="err()">Save changes</button>
+      [[pass]]
+      <button class="button" @click="close()" data-bulma-modal="close">Cancel</button>
+    </footer>
+  </div>
+  </div>
 </div>
 
 
