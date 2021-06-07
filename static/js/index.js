@@ -29,7 +29,7 @@ let init = (app) => {
         icons: {
             monkey: {
                 icon: {
-                    url: "https://png2.cleanpng.com/sh/e722d7198746faee31a101f237023519/L0KzQYm3UsA2N6JtfZH0aYP2gLBuTfNpcZ51edDFZXWwccHsTgBzcZ5mjNc2bXBxe7bCTfdweppxhNM2NXG6SLK9g8dlPmpqfqo3NEWzQIGAUcgyPWI8UKcBNEW4SIiCUb5xdpg=/kisspng-chimpanzee-ape-primate-monkey-gorilla-5a78a6c7d69ef8.4500071815178564558791.png", // url
+                    url: "https://storage.cloud.google.com/secret-antonym-315521.appspot.com/animals/monkey.png", // url
                     scaledSize: new google.maps.Size(35, 35), // scaled size
                     origin: new google.maps.Point(0, 0), // origin
                     anchor: new google.maps.Point(0, 0) // anchor
@@ -37,7 +37,7 @@ let init = (app) => {
             },
             giraffe: {
                 icon: {
-                    url: "https://creazilla-store.fra1.digitaloceanspaces.com/cliparts/17652/giraffe-head-clipart-md.png",
+                    url: "https://storage.cloud.google.com/secret-antonym-315521.appspot.com/animals/giraffe.png",
                     scaledSize: new google.maps.Size(35, 35), // scaled size
                     origin: new google.maps.Point(0, 0), // origin
                     anchor: new google.maps.Point(0, 0) // anchor
@@ -45,7 +45,7 @@ let init = (app) => {
             },
             bear: {
                 icon: {
-                    url: "https://www.clipartmax.com/png/middle/233-2331984_teddy-bear-face-clip-art-realistic-bear-clip-art.png",
+                    url: "https://storage.cloud.google.com/secret-antonym-315521.appspot.com/animals/bear.png",
                     scaledSize: new google.maps.Size(35, 35), // scaled size
                     origin: new google.maps.Point(0, 0), // origin
                     anchor: new google.maps.Point(0, 0) // anchor
@@ -53,7 +53,7 @@ let init = (app) => {
             },
             wolf: {
                 icon: {
-                    url: "https://www.clipartmax.com/png/middle/15-150287_gray-wolf-clip-art-9dc4brkdce-wolf-head-clipart-transparent.png",
+                    url: "https://storage.cloud.google.com/secret-antonym-315521.appspot.com/animals/wolf.png",
                     scaledSize: new google.maps.Size(35, 35), // scaled size
                     origin: new google.maps.Point(0, 0), // origin
                     anchor: new google.maps.Point(0, 0) // anchor
@@ -61,7 +61,7 @@ let init = (app) => {
             },
             baldeagle: {
                 icon: {
-                    url: "https://www.pngjoy.com/pngm/267/5117513_eagle-head-illustration-of-a-bald-eagle-transparent.png",
+                    url: "https://storage.cloud.google.com/secret-antonym-315521.appspot.com/animals/baldeagle.png",
                     scaledSize: new google.maps.Size(35, 35), // scaled size
                     origin: new google.maps.Point(0, 0), // origin
                     anchor: new google.maps.Point(0, 0) // anchor
@@ -69,7 +69,7 @@ let init = (app) => {
             },
             deer: {
                 icon: {
-                    url: "https://www.pikpng.com/pngl/m/531-5319055_deer-free-to-use-clip-art-roe-deer.png",
+                    url: "https://storage.cloud.google.com/secret-antonym-315521.appspot.com/animals/deer.png",
                     scaledSize: new google.maps.Size(35, 35), // scaled size
                     origin: new google.maps.Point(0, 0), // origin
                     anchor: new google.maps.Point(0, 0) // anchor
@@ -77,7 +77,7 @@ let init = (app) => {
             },
             turtle: {
                 icon: {
-                    url: "https://toppng.com/uploads/preview/turtle-png-green-sea-turtle-11563088791mqlagg4hpd.png",
+                    url: "https://storage.cloud.google.com/secret-antonym-315521.appspot.com/animals/turtle.png",
                     scaledSize: new google.maps.Size(35, 35), // scaled size
                     origin: new google.maps.Point(0, 0), // origin
                     anchor: new google.maps.Point(0, 0) // anchor
