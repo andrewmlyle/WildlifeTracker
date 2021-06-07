@@ -69,8 +69,10 @@
           </select>
       </span>
     </section>
+    <p>{{ selected }}</p>
     <footer class="modal-card-foot">
       [[if globals().get('user'):]]
+      <p>{{ errorMsg2 }}</p>
       <button class="button is-success" @click="add_sighting([[=globals().get('user').get('id')]], [[=user]], selected.id, selected.name)">Save changes</button>
       [[else:]]
       <p>{{ errorMsg }}</p>
