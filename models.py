@@ -30,4 +30,6 @@ db.define_table('sightings',
                 Field('longitude')
                 )
 
+db.sightings.user_id.readable = db.sightings.user_id.writable = False
+
 db.commit()

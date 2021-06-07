@@ -1,0 +1,63 @@
+[[extend 'layout.html']]
+
+<style>
+[v-cloak] {
+     display: none;
+}
+</style>
+
+<div class="section" id="vue-target" v-cloak>
+   <div class="container">
+            <h1 class="title">Edit Sighting at [[ =rows[0]["latitude"] ]] [[ =rows[0]["longitude"] ]]</h1>
+
+            <div class="field">
+                <label class="label">Change Animal</label>
+
+                <span class="select">
+                <select v-model="selected2">
+                    <option v-for="animal in animals" :key="animal.id" v-bind:value="{ id: animal.id, name: animal.animal_name }">
+                        {{ animal.animal_name }}
+                    </option>
+                </select>
+                </span>
+
+            </div>
+
+            <p>{{ selected2 }}</p>
+
+            <div class="field">
+                <label class="label">Change Latitude</label>
+                <input class="input" v-model="Latmessage" type="text" value='[[ =rows[0]["latitude"] ]]'>
+            </div>
+
+            <div class="field">
+                <label class="label">Change Longitude</label>
+                <input class="input" v-model="Lngmessage" type="text" value='[[ =rows[0]["longitude"] ]]'>
+            </div>
+
+            <p>{{ Latmessage }}</p>
+            <p>{{ Lngmessage }}</p>
+            <div class="field is-grouped">
+                <button class="button is-success" @click="add_sighting([[=globals().get('user').get('id')]], [[=user]], selected2.id, selected2.name, Latmessage, Lngmessage, [[=id]])">Save changes</button>
+
+                <a class="button is-link" href="[[=URL('index')]]">
+                    <span>Back</span>
+                </a>
+            </div>
+   </div>
+</div>
+
+[[block page_scripts]]
+<script>
+  let load_animal_url = "[[=XML(load_animal_url)]]";
+  let load_sighting_url = "[[=XML(load_sighting_url)]]";
+  let load_user_sightings_url = "[[=XML(load_user_sightings_url)]]";
+  let delete_sighting_url = "[[=XML(delete_sighting_url)]]";
+  let edit_sighting_url = "[[=XML(edit_sighting_url)]]";
+  let add_sighting_url = "[[=XML(add_sighting_url)]]";
+  let load_user_url = "[[=XML(load_user_url)]]";
+</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASOJoQ58yqnMAjzAyPtwpQ62zq-TtxBLo"></script>
+<script src="js/index.js"></script>
+[[end]]
