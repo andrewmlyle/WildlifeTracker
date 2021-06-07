@@ -10,13 +10,17 @@ let init = (app) => {
     app.data = {
         // Complete as you see fit.
         map: null,
+        Mapinit: false,
         markers: [],
         animals: [],
         sightings: [],
         mapOptions: {},
         lat: 0,
         long: 0,
+        Latmessage: 0,
+        Lngmessage: 0,
         selected: [],
+        selected2: [],
         errorMsg: "",
         address: "",
         filter: 0,
@@ -123,8 +127,37 @@ let init = (app) => {
             });
     };
 
+    app.edit = function(id) {
+        console.log(id);
+
+        axios.get(edit_sighting_url, {params: {"id": id}})
+            .then(function (response) {
+                console.log(response);
+                window.location.replace("../edit_sighting?id=" + id);
+            });
+    };
+
+    app.delete = function(location, id) {
+        console.log("calling delete");
+
+        axios.get(delete_sighting_url, {params: {"id": id}})
+            .then((result) => {
+                console.log(result);
+                for (let i = 0; i < app.vue.markers.length; i++) {
+                    console.log(app.vue.markers[i].position.lat(), location.lat);
+
+                    if (app.vue.markers[i].position.lat() == location.lat) {
+                        console.log("deleting!");
+                        app.vue.markers[i].setMap(null);
+                        app.vue.markers.splice(i, 1);
+                        break;
+                    }
+                }
+            });
+    };
+
     app.addMarker = function(location, animal, description, userEmail, id) {
-        console.log(location, animal, description, userEmail, id);
+        //console.log(location, animal, description, userEmail, id);
         const contentString =
             '<div class="card">' +
             '<header class="card-header">' +
@@ -153,8 +186,12 @@ let init = (app) => {
             '<footer class="card-footer" id=' +
             id +
             '>' +
-            '<button class="button is-success">Edit</button>' +
-            '<button class="button" @click="close()" data-bulma-modal="close">Delete</button>' +
+            '<a class="button is-success" id="editButt">' +
+            '<i class="fa fa-edit">Edit</i>' +
+            '</a>' +
+            '<a class="button is-danger" id="delButt">' +
+            '<i class="fa fa-trash">Delete</i>' +
+            '</a>' +
             '</footer>' +
             '</div>';
 
@@ -183,6 +220,19 @@ let init = (app) => {
                 //console.log(x);
                 if (app.vue.userName == userEmail) {
                     x.style.display = "block";
+
+                    document.getElementById("delButt").addEventListener("click", function() {
+                        app.delete(location, id);
+                        infowindow.close();
+                        app.updateSightings();
+                    });
+
+                    document.getElementById("editButt").addEventListener("click", function() {
+                        app.edit(id);
+                        infowindow.close();
+                        app.updateSightings();
+                    });
+
                 } else {
                     x.style.display = "none";
                 }
@@ -194,7 +244,9 @@ let init = (app) => {
     };
 
     app.updateUser = function(user) {
-        this.userName = user.email;
+        if (user) {
+            this.userName = user.email;
+        }
     }
 
     app.filterAnimal = function(event) {
@@ -223,8 +275,24 @@ let init = (app) => {
         }
     }
 
-    app.add_sighting = function (Userid, user, Animalid, Animalname) {
-        axios.post(add_sighting_url, {id: -1, animal_id: Animalid, user_id: Userid, latitude: app.vue.lat, longitude: app.vue.long})
+    app.add_sighting = function (Userid, user, Animalid, Animalname, lat, long, eid) {
+        let flag = true;
+
+        if (!lat) {
+            flag = false;
+            lat = app.vue.lat;
+        }
+
+        if (!long) {
+            flag = false;
+            long = app.vue.long;
+        }
+
+        if (!eid) {
+            eid = -1;
+        }
+
+        axios.post(add_sighting_url, {id: eid, animal_id: Animalid, user_id: Userid, latitude: lat, longitude: long})
             .then(function (response) {
                 console.log(response);
                 let Adesc = app.vue.animals[Animalid].animal_description;
@@ -235,6 +303,10 @@ let init = (app) => {
             });
 
         app.updateSightings();
+        if (flag) {
+            console.log("refresh");
+            window.location.replace('../index');
+        }
     };
 
     app.addressTranslate = function() {
@@ -277,6 +349,10 @@ let init = (app) => {
         });
     };
 
+    app.setIdx = function () {
+        console.log("in here");
+        this.Mapinit = true;
+    }
     // This contains all the methods.
     app.methods = {
         // Complete as you see fit.
@@ -284,6 +360,9 @@ let init = (app) => {
         add_sighting: app.add_sighting,
         close: app.close,
         err: app.err,
+        delete: app.delete,
+        edit: app.edit,
+        setIdx: app.setIdx,
         addressTranslate: app.addressTranslate,
         updateUser: app.updateUser,
     };
@@ -299,7 +378,10 @@ let init = (app) => {
     app.init = () => {
         // Put here any initialization code.
         // Typically this is a server GET call to load the data.
-        app.initMap();
+        if (app.vue.Mapinit) {
+            app.initMap();
+        }
+
         axios.get(load_animal_url)
             .then((result) => {
                 let r = result.data.rows;

@@ -23,6 +23,7 @@
 
 <div class="section" id="vue-target" v-cloak>
   <div v-if="updateUser([[=user]])"></div>
+  <div v-if="setIdx()"></div>
 
   <div class="contianer is-fluid">
     <div class="field">
@@ -67,7 +68,6 @@
             </option>
           </select>
       </span>
-      <p>{{selected}}</p>
     </section>
     <footer class="modal-card-foot">
       [[if globals().get('user'):]]
@@ -89,12 +89,11 @@
   let load_animal_url = "[[=XML(load_animal_url)]]";
   let load_sighting_url = "[[=XML(load_sighting_url)]]";
   let load_user_sightings_url = "[[=XML(load_user_sightings_url)]]";
+  let delete_sighting_url = "[[=XML(delete_sighting_url)]]";
+  let edit_sighting_url = "[[=XML(edit_sighting_url)]]";
   let add_sighting_url = "[[=XML(add_sighting_url)]]";
   let load_user_url = "[[=XML(load_user_url)]]";
 </script>
-<!-- Loads the index-specific js for Vue -->
-<!--<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>-->
 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASOJoQ58yqnMAjzAyPtwpQ62zq-TtxBLo"></script>
 <script src="js/index.js"></script>

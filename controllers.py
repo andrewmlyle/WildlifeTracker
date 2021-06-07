@@ -30,6 +30,8 @@ from yatl.helpers import A
 from .common import db, session, T, cache, auth, logger, authenticated, unauthenticated, flash
 from py4web.utils.url_signer import URLSigner
 from .models import get_user_email
+from py4web.utils.form import Form, FormStyleBulma
+from .common import Field
 
 url_signer = URLSigner(session)
 
@@ -45,14 +47,17 @@ def index():
         add_sighting_url=URL('add_sighting', signer=url_signer),
         user=auth.current_user,
         delete_sighting_url=URL('delete_sighting', signer=url_signer),
+        edit_sighting_url=URL('edit_sighting', signer=url_signer),
         load_user_url=URL('load_user', signer=url_signer),
     )
+
 
 @action('load_user')
 @action.uses(url_signer.verify(), db)
 def load_user():
     rows = db(db.auth_user.id == request.params.get('id')).select().as_list()
     return dict(rows=rows)
+
 
 @action('load_animals')
 @action.uses(url_signer.verify(), db)
@@ -69,16 +74,16 @@ def load_sightings():
 
 
 @action('load_user_sightings')
-@action.uses(url_signer.verify(), db)
+@action.uses(url_signer.verify(), db, auth.user)
 def load_user_sightings():
     id = request.params.get('id')
     assert id is not None
-    rows = db(db.posts.id == id).select().as_list()
+    rows = db(db.sightings.id == id).select().as_list()
     return dict(rows=rows)
 
 
 @action('delete_sighting')
-@action.uses(url_signer.verify(), db)
+@action.uses(url_signer.verify(), db, auth.user)
 def delete_sighting():
     id = request.params.get('id')
     assert id is not None
@@ -87,7 +92,7 @@ def delete_sighting():
 
 
 @action('add_sighting', method="POST")
-@action.uses(url_signer.verify(), db)
+@action.uses(url_signer.verify(), db, auth.user)
 def add_sighting():
     id = db.sightings.update_or_insert(
         (db.sightings.id == request.json.get('id')),
@@ -97,3 +102,29 @@ def add_sighting():
         longitude=request.json.get('longitude'),
     )
     return dict(id=id)
+
+
+@action('edit_sighting', method=["GET", "POST"])
+@action.uses(url_signer.verify(), db, auth.user, 'edit_sighting.html')
+def edit_sighting():
+    id = request.params.get('id')
+
+    # print(id)
+    p = db(db.sightings.id == id).select().as_list()
+
+    # print(p)
+
+    animals = db(db.animals).select().as_list()
+    print(animals)
+    # print(p[0])
+    # print(p[0]["latitude"])
+
+    return dict(rows=p, id=id, animals=animals, load_animal_url=URL('load_animals', signer=url_signer),
+                load_sighting_url=URL('load_sightings', signer=url_signer),
+                load_user_sightings_url=URL('load_user_sightings', signer=url_signer),
+                add_sighting_url=URL('add_sighting', signer=url_signer),
+                user=auth.current_user,
+                delete_sighting_url=URL('delete_sighting', signer=url_signer),
+                edit_sighting_url=URL('edit_sighting', signer=url_signer),
+                load_user_url=URL('load_user', signer=url_signer),
+                )
