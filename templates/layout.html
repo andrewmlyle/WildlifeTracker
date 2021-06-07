@@ -46,7 +46,7 @@
               [[if globals().get('user'):]]
               <a class="button is-light" href="[[=URL('auth/logout')]]">Sign out</a>
               [[else:]]
-              <a class="button is-link" href="[[=URL('auth/plugin/oauth2google/login', vars=dict(next='../index'))]]">Sign In</a>
+              <a class="button is-link" href="[[=URL('auth/plugin/oauth2google/login', vars=dict(next='../../../../default/index'))]]">Sign In</a>
               [[pass]]
             </div>
           </div>
@@ -54,8 +54,8 @@
         </div>
       </div>
     </nav>
-
     <!-- beginning of HTML inserted by extending template -->
+
     [[include]]
     <!-- end of HTML inserted by extending template -->
   </body>
