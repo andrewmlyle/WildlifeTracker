@@ -27,6 +27,14 @@ let init = (app) => {
         filter: 0,
         userName: "",
         icons: {
+            PJ: {
+                icon: {
+                    url: "https://storage.cloud.google.com/secret-antonym-315521.appspot.com/animals/PJ.PNG", // url
+                    scaledSize: new google.maps.Size(35, 35), // scaled size
+                    origin: new google.maps.Point(0, 0), // origin
+                    anchor: new google.maps.Point(0, 0) // anchor
+                },
+            },
             monkey: {
                 icon: {
                     url: "https://storage.cloud.google.com/secret-antonym-315521.appspot.com/animals/monkey.png", // url
@@ -282,8 +290,8 @@ let init = (app) => {
         console.log(Animalid, Animalname);
 
         if (Animalid === undefined || Animalname === undefined) {
-            app.vue.errorMsg2 = "fuck you andrew";
-            console.log("you heard me");
+            app.vue.errorMsg2 = "";
+            console.log("");
             return;
         }
 
