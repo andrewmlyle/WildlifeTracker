@@ -29,7 +29,7 @@ let init = (app) => {
         icons: {
             monkey: {
                 icon: {
-                    url: "https://png2.cleanpng.com/sh/e722d7198746faee31a101f237023519/L0KzQYm3UsA2N6JtfZH0aYP2gLBuTfNpcZ51edDFZXWwccHsTgBzcZ5mjNc2bXBxe7bCTfdweppxhNM2NXG6SLK9g8dlPmpqfqo3NEWzQIGAUcgyPWI8UKcBNEW4SIiCUb5xdpg=/kisspng-chimpanzee-ape-primate-monkey-gorilla-5a78a6c7d69ef8.4500071815178564558791.png", // url
+                    url: "https://storage.cloud.google.com/secret-antonym-315521.appspot.com/monkey-cartoon-face-hi.png",
                     scaledSize: new google.maps.Size(35, 35), // scaled size
                     origin: new google.maps.Point(0, 0), // origin
                     anchor: new google.maps.Point(0, 0) // anchor
@@ -121,34 +121,29 @@ let init = (app) => {
                     }
                     axios.get(load_user_url, {params: {"id": sight.user_id}})
                     .then((result) => {
-                        console.log(result.data.rows[0].email);
                         app.addMarker({lat: x, lng: y}, name, desc, result.data.rows[0].email, sight.id);
                     });
                 }
             });
     };
 
-    app.edit = function(id) {
-        console.log(id);
+    app.updateLocation = function(lat, long) {
+        app.vue.Latmessage = lat;
+        app.vue.Lngmessage = long;
+    }
 
+    app.edit = function(id) {
         axios.get(edit_sighting_url, {params: {"id": id}})
             .then(function (response) {
-                console.log(response);
                 window.location.replace("../edit_sighting?id=" + id);
             });
     };
 
     app.delete = function(location, id) {
-        console.log("calling delete");
-
         axios.get(delete_sighting_url, {params: {"id": id}})
             .then((result) => {
-                console.log(result);
                 for (let i = 0; i < app.vue.markers.length; i++) {
-                    console.log(app.vue.markers[i].position.lat(), location.lat);
-
                     if (app.vue.markers[i].position.lat() == location.lat) {
-                        console.log("deleting!");
                         app.vue.markers[i].setMap(null);
                         app.vue.markers.splice(i, 1);
                         break;
@@ -158,7 +153,6 @@ let init = (app) => {
     };
 
     app.addMarker = function(location, animal, description, userEmail, id) {
-        //console.log(location, animal, description, userEmail, id);
         const contentString =
             '<div class="card">' +
             '<header class="card-header">' +
@@ -201,7 +195,6 @@ let init = (app) => {
         });
         const marker = new google.maps.Marker({
             position: location,
-            //label: app.vue.userName,
             icon: app.vue.icons[animal].icon,
             map: this.map,
         });
@@ -214,11 +207,7 @@ let init = (app) => {
 
             // Log the result
             promise.then((response) => {
-                //console.log(response)
-                console.log(app.vue.userName, userEmail);
-
                 let x = document.getElementById(id);
-                //console.log(x);
                 if (app.vue.userName == userEmail) {
                     x.style.display = "block";
 
@@ -276,34 +265,27 @@ let init = (app) => {
         }
     }
 
-    app.add_sighting = function (Userid, user, Animalid, Animalname, lat, long, eid) {
+    app.add_sighting = function (Userid, user, Animalid, Animalname, eid) {
         let flag = true;
-
-        console.log(Animalid, Animalname);
+        let lat = 0;
+        let long = 0;
 
         if (Animalid === undefined || Animalname === undefined) {
-            app.vue.errorMsg2 = "fuck you andrew";
-            console.log("you heard me");
+            app.vue.errorMsg2 = "please select an animal";
             return;
-        }
-
-        if (!lat) {
-            flag = false;
-            lat = app.vue.lat;
-        }
-
-        if (!long) {
-            flag = false;
-            long = app.vue.long;
         }
 
         if (!eid) {
             eid = -1;
+            lat = app.vue.lat;
+            long = app.vue.long;
+        } else {
+            lat = document.getElementById('test1').value;
+            long = document.getElementById('test2').value;
         }
 
             axios.post(add_sighting_url, {id: eid, animal_id: Animalid, user_id: Userid, latitude: lat, longitude: long})
             .then(function (response) {
-                console.log(response);
                 let Adesc = app.vue.animals[Animalid].animal_description;
                 app.addMarker({lat: app.vue.lat, lng: app.vue.long}, Animalname, Adesc, user["email"], response.data.id);
                 document.getElementById("myModal").classList.toggle("is-active");
@@ -314,7 +296,6 @@ let init = (app) => {
 
             app.updateSightings();
             if (flag) {
-                console.log("refresh");
                 window.location.replace('../index');
             }
 
@@ -361,12 +342,10 @@ let init = (app) => {
     };
 
     app.setIdx = function () {
-        console.log("in here");
         this.Mapinit = true;
     }
-    // This contains all the methods.
+
     app.methods = {
-        // Complete as you see fit.
         filterAnimal: app.filterAnimal,
         add_sighting: app.add_sighting,
         close: app.close,
@@ -376,19 +355,16 @@ let init = (app) => {
         setIdx: app.setIdx,
         addressTranslate: app.addressTranslate,
         updateUser: app.updateUser,
+        updateLocation: app.updateLocation,
     };
 
-    // This creates the Vue instance.
     app.vue = new Vue({
         el: "#vue-target",
         data: app.data,
         methods: app.methods,
     });
 
-    // And this initializes it.
     app.init = () => {
-        // Put here any initialization code.
-        // Typically this is a server GET call to load the data.
         if (app.vue.Mapinit) {
             app.initMap();
         }
@@ -419,17 +395,13 @@ let init = (app) => {
                     }
                     axios.get(load_user_url, {params: {"id": sight.user_id}})
                     .then((result) => {
-                        console.log(result.data.rows[0].email);
                         app.addMarker({lat: x, lng: y}, name, desc, result.data.rows[0].email, sight.id);
                     });
                 }
             });
     };
 
-    // Call to the initializer.
     app.init();
 };
 
-// This takes the (empty) app object, and initializes it,
-// putting all the code i
 init(app);

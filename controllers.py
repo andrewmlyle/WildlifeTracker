@@ -105,19 +105,11 @@ def add_sighting():
 
 
 @action('edit_sighting', method=["GET", "POST"])
-@action.uses(url_signer.verify(), db, auth.user, 'edit_sighting.html')
+@action.uses(db, auth, 'edit_sighting.html')
 def edit_sighting():
     id = request.params.get('id')
-
-    # print(id)
     p = db(db.sightings.id == id).select().as_list()
-
-    # print(p)
-
     animals = db(db.animals).select().as_list()
-    print(animals)
-    # print(p[0])
-    # print(p[0]["latitude"])
 
     return dict(rows=p, id=id, animals=animals, load_animal_url=URL('load_animals', signer=url_signer),
                 load_sighting_url=URL('load_sightings', signer=url_signer),

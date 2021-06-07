@@ -23,22 +23,23 @@
 
             </div>
 
-            <p>{{ selected2 }}</p>
+            [[Latmessage = rows[0]["latitude"] ]]
+            [[Lngmessage = rows[0]["longitude"] ]]
 
             <div class="field">
                 <label class="label">Change Latitude</label>
-                <input class="input" v-model="Latmessage" type="text" value='[[ =rows[0]["latitude"] ]]'>
+                <input class="input" id="test1" v-model="[[=Latmessage ]]" type="text">
             </div>
+
 
             <div class="field">
                 <label class="label">Change Longitude</label>
-                <input class="input" v-model="Lngmessage" type="text" value='[[ =rows[0]["longitude"] ]]'>
+                <input class="input" id="test2" v-model="[[=Lngmessage ]]" type="text">
             </div>
 
-            <p>{{ Latmessage }}</p>
-            <p>{{ Lngmessage }}</p>
             <div class="field is-grouped">
-                <button class="button is-success" @click="add_sighting([[=globals().get('user').get('id')]], [[=user]], selected2.id, selected2.name, Latmessage, Lngmessage, [[=id]])">Save changes</button>
+                <p>{{ errorMsg2 }}</p>
+                <button class="button is-success" @click="add_sighting([[=globals().get('user').get('id')]], [[=user]], selected2.id, selected2.name, [[=id]])">Save changes</button>
 
                 <a class="button is-link" href="[[=URL('index')]]">
                     <span>Back</span>
