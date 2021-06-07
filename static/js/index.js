@@ -22,6 +22,7 @@ let init = (app) => {
         selected: [],
         selected2: [],
         errorMsg: "",
+        errorMsg2: "",
         address: "",
         filter: 0,
         userName: "",
@@ -278,6 +279,14 @@ let init = (app) => {
     app.add_sighting = function (Userid, user, Animalid, Animalname, lat, long, eid) {
         let flag = true;
 
+        console.log(Animalid, Animalname);
+
+        if (Animalid === undefined || Animalname === undefined) {
+            app.vue.errorMsg2 = "fuck you andrew";
+            console.log("you heard me");
+            return;
+        }
+
         if (!lat) {
             flag = false;
             lat = app.vue.lat;
@@ -292,7 +301,6 @@ let init = (app) => {
             eid = -1;
         }
 
-        if (Animalid) {
             axios.post(add_sighting_url, {id: eid, animal_id: Animalid, user_id: Userid, latitude: lat, longitude: long})
             .then(function (response) {
                 console.log(response);
@@ -301,6 +309,7 @@ let init = (app) => {
                 document.getElementById("myModal").classList.toggle("is-active");
                 app.vue.lat = 0;
                 app.vue.long = 0;
+                app.vue.errorMsg2 = "";
             });
 
             app.updateSightings();
@@ -308,7 +317,7 @@ let init = (app) => {
                 console.log("refresh");
                 window.location.replace('../index');
             }
-        }
+
     };
 
     app.addressTranslate = function() {
