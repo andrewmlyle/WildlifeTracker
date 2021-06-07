@@ -292,7 +292,8 @@ let init = (app) => {
             eid = -1;
         }
 
-        axios.post(add_sighting_url, {id: eid, animal_id: Animalid, user_id: Userid, latitude: lat, longitude: long})
+        if (Animalid) {
+            axios.post(add_sighting_url, {id: eid, animal_id: Animalid, user_id: Userid, latitude: lat, longitude: long})
             .then(function (response) {
                 console.log(response);
                 let Adesc = app.vue.animals[Animalid].animal_description;
@@ -302,10 +303,11 @@ let init = (app) => {
                 app.vue.long = 0;
             });
 
-        app.updateSightings();
-        if (flag) {
-            console.log("refresh");
-            window.location.replace('../index');
+            app.updateSightings();
+            if (flag) {
+                console.log("refresh");
+                window.location.replace('../index');
+            }
         }
     };
 
