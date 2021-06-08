@@ -27,54 +27,6 @@ let init = (app) => {
         filter: 0,
         userName: "",
         icons: {
-            avani: {
-                icon: {
-                    url: "https://storage.cloud.google.com/secret-antonym-315521.appspot.com/animals/avani.jpg", // url
-                    scaledSize: new google.maps.Size(35, 35), // scaled size
-                    origin: new google.maps.Point(0, 0), // origin
-                    anchor: new google.maps.Point(0, 0) // anchor
-                },
-            },
-            arjun: {
-                icon: {
-                    url: "https://storage.cloud.google.com/secret-antonym-315521.appspot.com/animals/arjun.jpg", // url
-                    scaledSize: new google.maps.Size(35, 35), // scaled size
-                    origin: new google.maps.Point(0, 0), // origin
-                    anchor: new google.maps.Point(0, 0) // anchor
-                },
-            },
-            navya: {
-                icon: {
-                    url: "https://storage.cloud.google.com/secret-antonym-315521.appspot.com/animals/navya.png", // url
-                    scaledSize: new google.maps.Size(35, 35), // scaled size
-                    origin: new google.maps.Point(0, 0), // origin
-                    anchor: new google.maps.Point(0, 0) // anchor
-                },
-            },
-            venk: {
-                icon: {
-                    url: "https://storage.cloud.google.com/secret-antonym-315521.appspot.com/animals/venk.png", // url
-                    scaledSize: new google.maps.Size(35, 35), // scaled size
-                    origin: new google.maps.Point(0, 0), // origin
-                    anchor: new google.maps.Point(0, 0) // anchor
-                },
-            },
-            andrew: {
-                icon: {
-                    url: "https://storage.cloud.google.com/secret-antonym-315521.appspot.com/animals/andrew.jpg", // url
-                    scaledSize: new google.maps.Size(35, 35), // scaled size
-                    origin: new google.maps.Point(0, 0), // origin
-                    anchor: new google.maps.Point(0, 0) // anch
-                },
-            },
-            PJ: {
-                icon: {
-                    url: "https://storage.cloud.google.com/secret-antonym-315521.appspot.com/animals/PJ.PNG", // url
-                    scaledSize: new google.maps.Size(35, 35), // scaled size
-                    origin: new google.maps.Point(0, 0), // origin
-                    anchor: new google.maps.Point(0, 0) // anchor
-                },
-            },
             monkey: {
                 icon: {
                     url: "https://storage.cloud.google.com/secret-antonym-315521.appspot.com/animals/monkey.png", // url
