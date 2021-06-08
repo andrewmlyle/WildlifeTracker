@@ -96,7 +96,7 @@ T_FOLDER = required_folder(APP_FOLDER, "translations")
 USE_CELERY = False
 CELERY_BROKER = "redis://localhost:6379/0"
 OAUTH2GOOGLE_CLIENT_ID = "382219547800-fho3e5usc7hil3410l3nj9dhn9iq239h.apps.googleusercontent.com"
-OAUTH2GOOGLE_CLIENT_SECRET = "1yhS_nyKQdNVz2FToy-yXcnT"
+OAUTH2GOOGLE_CLIENT_SECRET = ""
 # try import private settings
 # try:
 #     from .private.secret_settings import *
